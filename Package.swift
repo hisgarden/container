@@ -27,7 +27,7 @@ let scVersion = "0.9.1"
 
 let package = Package(
     name: "container",
-    platforms: [.macOS("15")],
+    platforms: [.macOS("26")],
     products: [
         .library(name: "ContainerAPIService", targets: ["ContainerAPIService"]),
         .library(name: "ContainerSandboxService", targets: ["ContainerSandboxService"]),
@@ -51,6 +51,7 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-protobuf.git", from: "1.29.0"),
         .package(url: "https://github.com/apple/swift-nio.git", from: "2.80.0"),
         .package(url: "https://github.com/swiftlang/swift-docc-plugin.git", from: "1.1.0"),
+        .package(url: "https://github.com/apple/swift-testing.git", from: "0.10.0"),
         .package(url: "https://github.com/swift-server/async-http-client.git", from: "1.20.1"),
         .package(url: "https://github.com/orlandos-nl/DNSClient.git", from: "2.4.1"),
         .package(url: "https://github.com/Bouke/DNS.git", from: "1.2.0"),
@@ -186,7 +187,8 @@ let package = Package(
         .testTarget(
             name: "ContainerNetworkServiceTests",
             dependencies: [
-                "ContainerNetworkService"
+                "ContainerNetworkService",
+                .product(name: "Testing", package: "swift-testing")
             ]
         ),
         .executableTarget(
@@ -240,7 +242,8 @@ let package = Package(
         .testTarget(
             name: "ContainerBuildTests",
             dependencies: [
-                "ContainerBuild"
+                "ContainerBuild",
+                .product(name: "Testing", package: "swift-testing")
             ]
         ),
         .target(
@@ -267,6 +270,7 @@ let package = Package(
                 .product(name: "Containerization", package: "containerization"),
                 "ContainerClient",
                 "ContainerPersistence",
+                .product(name: "Testing", package: "swift-testing")
             ]
         ),
         .target(
@@ -287,7 +291,8 @@ let package = Package(
         .testTarget(
             name: "ContainerPluginTests",
             dependencies: [
-                "ContainerPlugin"
+                "ContainerPlugin",
+                .product(name: "Testing", package: "swift-testing")
             ]
         ),
         .target(
@@ -311,7 +316,10 @@ let package = Package(
         ),
         .testTarget(
             name: "TerminalProgressTests",
-            dependencies: ["TerminalProgress"]
+            dependencies: [
+                "TerminalProgress",
+                .product(name: "Testing", package: "swift-testing")
+            ]
         ),
         .target(
             name: "DNSServer",
@@ -328,6 +336,7 @@ let package = Package(
             dependencies: [
                 .product(name: "DNS", package: "DNS"),
                 "DNSServer",
+                .product(name: "Testing", package: "swift-testing")
             ]
         ),
         .target(
@@ -341,7 +350,10 @@ let package = Package(
         ),
         .testTarget(
             name: "SocketForwarderTests",
-            dependencies: ["SocketForwarder"]
+            dependencies: [
+                "SocketForwarder",
+                .product(name: "Testing", package: "swift-testing")
+            ]
         ),
         .testTarget(
             name: "CLITests",
@@ -353,6 +365,7 @@ let package = Package(
                 "ContainerBuild",
                 "ContainerClient",
                 "ContainerNetworkService",
+                .product(name: "Testing", package: "swift-testing")
             ],
             path: "Tests/CLITests"
         ),

@@ -14,20 +14,23 @@
 // limitations under the License.
 //===----------------------------------------------------------------------===//
 
-import XCTest
+import Foundation
+import Testing
 
 @testable import TerminalProgress
 
-final class ProgressBarTests: XCTestCase {
+struct ProgressBarTests {
+    @Test
     func testSpinner() async throws {
         let config = try ProgressConfig(
             description: "Task"
         )
         let progress = ProgressBar(config: config)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ Task [0s]")
+        #expect(output == "⠋ Task [0s]")
     }
 
+    @Test
     func testSpinnerFinished() async throws {
         let config = try ProgressConfig(
             description: "Task"
@@ -35,9 +38,10 @@ final class ProgressBarTests: XCTestCase {
         let progress = ProgressBar(config: config)
         progress.finish()
         let output = progress.draw()
-        XCTAssertEqual(output, "✔ Task [0s]")
+        #expect(output == "✔ Task [0s]")
     }
 
+    @Test
     func testNoSpinner() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -45,9 +49,10 @@ final class ProgressBarTests: XCTestCase {
         )
         let progress = ProgressBar(config: config)
         let output = progress.draw()
-        XCTAssertEqual(output, "Task [0s]")
+        #expect(output == "Task [0s]")
     }
 
+    @Test
     func testNoSpinnerFinished() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -56,9 +61,10 @@ final class ProgressBarTests: XCTestCase {
         let progress = ProgressBar(config: config)
         progress.finish()
         let output = progress.draw()
-        XCTAssertEqual(output, "Task [0s]")
+        #expect(output == "Task [0s]")
     }
 
+    @Test
     func testNoTasks() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -66,9 +72,10 @@ final class ProgressBarTests: XCTestCase {
         )
         let progress = ProgressBar(config: config)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ Task [0s]")
+        #expect(output == "⠋ Task [0s]")
     }
 
+    @Test
     func testTasks() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -76,9 +83,10 @@ final class ProgressBarTests: XCTestCase {
         )
         let progress = ProgressBar(config: config)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ Task [0s]")
+        #expect(output == "⠋ Task [0s]")
     }
 
+    @Test
     func testTasksAdd() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -87,9 +95,10 @@ final class ProgressBarTests: XCTestCase {
         let progress = ProgressBar(config: config)
         progress.add(tasks: 1)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ Task [0s]")
+        #expect(output == "⠋ Task [0s]")
     }
 
+    @Test
     func testTasksSet() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -98,9 +107,10 @@ final class ProgressBarTests: XCTestCase {
         let progress = ProgressBar(config: config)
         progress.set(tasks: 2)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ Task [0s]")
+        #expect(output == "⠋ Task [0s]")
     }
 
+    @Test
     func testTotalTasks() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -109,9 +119,10 @@ final class ProgressBarTests: XCTestCase {
         )
         let progress = ProgressBar(config: config)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ [0/2] Task [0s]")
+        #expect(output == "⠋ [0/2] Task [0s]")
     }
 
+    @Test
     func testTotalTasksFinished() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -121,9 +132,10 @@ final class ProgressBarTests: XCTestCase {
         let progress = ProgressBar(config: config)
         progress.finish()
         let output = progress.draw()
-        XCTAssertEqual(output, "✔ [0/2] Task [0s]")
+        #expect(output == "✔ [0/2] Task [0s]")
     }
 
+    @Test
     func testTotalTasksAdd() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -133,9 +145,10 @@ final class ProgressBarTests: XCTestCase {
         let progress = ProgressBar(config: config)
         progress.add(totalTasks: 1)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ [0/2] Task [0s]")
+        #expect(output == "⠋ [0/2] Task [0s]")
     }
 
+    @Test
     func testTotalTasksSet() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -145,34 +158,38 @@ final class ProgressBarTests: XCTestCase {
         let progress = ProgressBar(config: config)
         progress.set(totalTasks: 2)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ [0/2] Task [0s]")
+        #expect(output == "⠋ [0/2] Task [0s]")
     }
 
+    @Test
     func testTotalTasksInvalid() throws {
         do {
             let _ = try ProgressConfig(description: "test", totalTasks: 0)
         } catch ProgressConfig.Error.invalid(_) {
             return
         }
-        XCTFail("expected ProgressConfig.Error.invalid")
+        Issue.record("expected ProgressConfig.Error.invalid")
     }
 
+    @Test
     func testDescription() async throws {
         let config = try ProgressConfig(
             description: "Task"
         )
         let progress = ProgressBar(config: config)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ Task [0s]")
+        #expect(output == "⠋ Task [0s]")
     }
 
+    @Test
     func testNoDescription() async throws {
         let config = try ProgressConfig()
         let progress = ProgressBar(config: config)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ [0s]")
+        #expect(output == "⠋ [0s]")
     }
 
+    @Test
     func testNoPercent() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -182,9 +199,10 @@ final class ProgressBarTests: XCTestCase {
         let progress = ProgressBar(config: config)
         progress.set(items: 1)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ Task [0s]")
+        #expect(output == "⠋ Task [0s]")
     }
 
+    @Test
     func testPercentHidden() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -192,9 +210,10 @@ final class ProgressBarTests: XCTestCase {
         )
         let progress = ProgressBar(config: config)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ Task [0s]")
+        #expect(output == "⠋ Task [0s]")
     }
 
+    @Test
     func testPercentItems() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -204,9 +223,10 @@ final class ProgressBarTests: XCTestCase {
         let progress = ProgressBar(config: config)
         progress.set(items: 1)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ Task 50% [0s]")
+        #expect(output == "⠋ Task 50% [0s]")
     }
 
+    @Test
     func testPercentItemsFinished() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -217,9 +237,10 @@ final class ProgressBarTests: XCTestCase {
         progress.set(items: 1)
         progress.finish()
         let output = progress.draw()
-        XCTAssertEqual(output, "✔ Task 100% [0s]")
+        #expect(output == "✔ Task 100% [0s]")
     }
 
+    @Test
     func testPercentSize() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -231,9 +252,10 @@ final class ProgressBarTests: XCTestCase {
         let progress = ProgressBar(config: config)
         progress.set(size: 1)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ Task 50% [0s]")
+        #expect(output == "⠋ Task 50% [0s]")
     }
 
+    @Test
     func testPercentSizeFinished() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -246,9 +268,10 @@ final class ProgressBarTests: XCTestCase {
         progress.set(size: 1)
         progress.finish()
         let output = progress.draw()
-        XCTAssertEqual(output, "✔ Task 100% [0s]")
+        #expect(output == "✔ Task 100% [0s]")
     }
 
+    @Test
     func testNoProgressBar() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -259,9 +282,10 @@ final class ProgressBarTests: XCTestCase {
         let progress = ProgressBar(config: config)
         progress.set(items: 1)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ Task 50% [0s]")
+        #expect(output == "⠋ Task 50% [0s]")
     }
 
+    @Test
     func testProgressBar() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -272,9 +296,10 @@ final class ProgressBarTests: XCTestCase {
         let progress = ProgressBar(config: config)
         progress.set(items: 1)
         let output = progress.draw()
-        XCTAssertEqual(output, "Task 50% |██  | [0s]")
+        #expect(output == "Task 50% |██  | [0s]")
     }
 
+    @Test
     func testProgressBarFinished() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -286,9 +311,10 @@ final class ProgressBarTests: XCTestCase {
         progress.set(items: 1)
         progress.finish()
         let output = progress.draw()
-        XCTAssertEqual(output, "Task 100% |███| [0s]")
+        #expect(output == "Task 100% |███| [0s]")
     }
 
+    @Test
     func testProgressBarMinWidth() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -299,9 +325,10 @@ final class ProgressBarTests: XCTestCase {
         let progress = ProgressBar(config: config)
         progress.set(items: 1)
         let output = progress.draw()
-        XCTAssertEqual(output, "Task 50% | | [0s]")
+        #expect(output == "Task 50% | | [0s]")
     }
 
+    @Test
     func testProgressBarMinWidthFinished() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -313,9 +340,10 @@ final class ProgressBarTests: XCTestCase {
         progress.set(items: 1)
         progress.finish()
         let output = progress.draw()
-        XCTAssertEqual(output, "Task 100% |█| [0s]")
+        #expect(output == "Task 100% |█| [0s]")
     }
 
+    @Test
     func testNoItems() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -323,9 +351,10 @@ final class ProgressBarTests: XCTestCase {
         )
         let progress = ProgressBar(config: config)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ Task [0s]")
+        #expect(output == "⠋ Task [0s]")
     }
 
+    @Test
     func testItemsZero() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -333,9 +362,10 @@ final class ProgressBarTests: XCTestCase {
         )
         let progress = ProgressBar(config: config)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ Task [0s]")
+        #expect(output == "⠋ Task [0s]")
     }
 
+    @Test
     func testItemsAdd() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -344,9 +374,10 @@ final class ProgressBarTests: XCTestCase {
         let progress = ProgressBar(config: config)
         progress.add(items: 1)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ Task (1 it) [0s]")
+        #expect(output == "⠋ Task (1 it) [0s]")
     }
 
+    @Test
     func testItemsAddFinish() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -356,9 +387,10 @@ final class ProgressBarTests: XCTestCase {
         progress.add(items: 1)
         progress.finish()
         let output = progress.draw()
-        XCTAssertEqual(output, "✔ Task [0s]")
+        #expect(output == "✔ Task [0s]")
     }
 
+    @Test
     func testItemsSet() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -367,9 +399,10 @@ final class ProgressBarTests: XCTestCase {
         let progress = ProgressBar(config: config)
         progress.set(items: 2)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ Task (2 it) [0s]")
+        #expect(output == "⠋ Task (2 it) [0s]")
     }
 
+    @Test
     func testTotalItemsZeroItems() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -378,9 +411,10 @@ final class ProgressBarTests: XCTestCase {
         )
         let progress = ProgressBar(config: config)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ Task 0% [0s]")
+        #expect(output == "⠋ Task 0% [0s]")
     }
 
+    @Test
     func testTotalItems() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -390,9 +424,10 @@ final class ProgressBarTests: XCTestCase {
         let progress = ProgressBar(config: config)
         progress.set(items: 1)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ Task 50% (1 of 2 it) [0s]")
+        #expect(output == "⠋ Task 50% (1 of 2 it) [0s]")
     }
 
+    @Test
     func testTotalItemsFinish() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -403,9 +438,10 @@ final class ProgressBarTests: XCTestCase {
         progress.set(items: 1)
         progress.finish()
         let output = progress.draw()
-        XCTAssertEqual(output, "✔ Task 100% (2 it) [0s]")
+        #expect(output == "✔ Task 100% (2 it) [0s]")
     }
 
+    @Test
     func testTotalItemsAdd() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -416,9 +452,10 @@ final class ProgressBarTests: XCTestCase {
         progress.set(items: 1)
         progress.add(totalItems: 1)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ Task 50% (1 of 2 it) [0s]")
+        #expect(output == "⠋ Task 50% (1 of 2 it) [0s]")
     }
 
+    @Test
     func testTotalItemsSet() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -429,18 +466,20 @@ final class ProgressBarTests: XCTestCase {
         progress.set(items: 1)
         progress.set(totalItems: 2)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ Task 50% (1 of 2 it) [0s]")
+        #expect(output == "⠋ Task 50% (1 of 2 it) [0s]")
     }
 
+    @Test
     func testTotalItemsInvalid() throws {
         do {
             let _ = try ProgressConfig(description: "test", totalItems: 0)
         } catch ProgressConfig.Error.invalid(_) {
             return
         }
-        XCTFail("expected ProgressConfig.Error.invalid")
+        Issue.record("expected ProgressConfig.Error.invalid")
     }
 
+    @Test
     func testNoSize() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -448,9 +487,10 @@ final class ProgressBarTests: XCTestCase {
         )
         let progress = ProgressBar(config: config)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ Task [0s]")
+        #expect(output == "⠋ Task [0s]")
     }
 
+    @Test
     func testSizeZero() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -458,9 +498,10 @@ final class ProgressBarTests: XCTestCase {
         )
         let progress = ProgressBar(config: config)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ Task [0s]")
+        #expect(output == "⠋ Task [0s]")
     }
 
+    @Test
     func testSizeAdd() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -470,9 +511,10 @@ final class ProgressBarTests: XCTestCase {
         let progress = ProgressBar(config: config)
         progress.add(size: 1)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ Task (1 byte) [0s]")
+        #expect(output == "⠋ Task (1 byte) [0s]")
     }
 
+    @Test
     func testSizeAddFinish() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -483,9 +525,10 @@ final class ProgressBarTests: XCTestCase {
         progress.add(size: 1)
         progress.finish()
         let output = progress.draw()
-        XCTAssertEqual(output, "✔ Task [0s]")
+        #expect(output == "✔ Task [0s]")
     }
 
+    @Test
     func testSizeSet() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -495,9 +538,10 @@ final class ProgressBarTests: XCTestCase {
         let progress = ProgressBar(config: config)
         progress.set(size: 2)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ Task (2 bytes) [0s]")
+        #expect(output == "⠋ Task (2 bytes) [0s]")
     }
 
+    @Test
     func testTotalSizeZeroSize() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -506,9 +550,10 @@ final class ProgressBarTests: XCTestCase {
         )
         let progress = ProgressBar(config: config)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ Task 0% [0s]")
+        #expect(output == "⠋ Task 0% [0s]")
     }
 
+    @Test
     func testTotalSizeDifferentUnits() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -519,9 +564,10 @@ final class ProgressBarTests: XCTestCase {
         let progress = ProgressBar(config: config)
         progress.set(size: 1)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ Task 50% (1 byte/2 bytes) [0s]")
+        #expect(output == "⠋ Task 50% (1 byte/2 bytes) [0s]")
     }
 
+    @Test
     func testTotalSizeDifferentUnitsFinish() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -533,9 +579,10 @@ final class ProgressBarTests: XCTestCase {
         progress.set(size: 1)
         progress.finish()
         let output = progress.draw()
-        XCTAssertEqual(output, "✔ Task 100% (2 bytes) [0s]")
+        #expect(output == "✔ Task 100% (2 bytes) [0s]")
     }
 
+    @Test
     func testTotalSizeSameUnits() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -546,9 +593,10 @@ final class ProgressBarTests: XCTestCase {
         let progress = ProgressBar(config: config)
         progress.set(size: 2)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ Task 50% (2/4 bytes) [0s]")
+        #expect(output == "⠋ Task 50% (2/4 bytes) [0s]")
     }
 
+    @Test
     func testTotalSizeSameUnitsFinish() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -560,9 +608,10 @@ final class ProgressBarTests: XCTestCase {
         progress.set(size: 2)
         progress.finish()
         let output = progress.draw()
-        XCTAssertEqual(output, "✔ Task 100% (4 bytes) [0s]")
+        #expect(output == "✔ Task 100% (4 bytes) [0s]")
     }
 
+    @Test
     func testTotalSizeAdd() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -574,9 +623,10 @@ final class ProgressBarTests: XCTestCase {
         progress.set(size: 2)
         progress.add(totalSize: 1)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ Task 50% (2/4 bytes) [0s]")
+        #expect(output == "⠋ Task 50% (2/4 bytes) [0s]")
     }
 
+    @Test
     func testTotalSizeSet() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -588,18 +638,20 @@ final class ProgressBarTests: XCTestCase {
         progress.set(size: 2)
         progress.set(totalSize: 4)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ Task 50% (2/4 bytes) [0s]")
+        #expect(output == "⠋ Task 50% (2/4 bytes) [0s]")
     }
 
+    @Test
     func testTotalSizeInvalid() throws {
         do {
             let _ = try ProgressConfig(description: "test", totalSize: 0)
         } catch ProgressConfig.Error.invalid(_) {
             return
         }
-        XCTFail("expected ProgressConfig.Error.invalid")
+        Issue.record("expected ProgressConfig.Error.invalid")
     }
 
+    @Test
     func testItemsAndSize() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -613,9 +665,10 @@ final class ProgressBarTests: XCTestCase {
         progress.set(items: 1)
         progress.set(size: 2)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ Task 50% (1 of 2 it, 2/4 bytes) [0s]")
+        #expect(output == "⠋ Task 50% (1 of 2 it, 2/4 bytes) [0s]")
     }
 
+    @Test
     func testItemsAndSizeFinish() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -630,9 +683,10 @@ final class ProgressBarTests: XCTestCase {
         progress.set(size: 2)
         progress.finish()
         let output = progress.draw()
-        XCTAssertEqual(output, "✔ Task 100% (2 it, 4 bytes) [0s]")
+        #expect(output == "✔ Task 100% (2 it, 4 bytes) [0s]")
     }
 
+    @Test
     func testNoSpeed() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -642,9 +696,10 @@ final class ProgressBarTests: XCTestCase {
         let progress = ProgressBar(config: config)
         progress.set(size: 2)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ Task 50% (2/4 bytes) [0s]")
+        #expect(output == "⠋ Task 50% (2/4 bytes) [0s]")
     }
 
+    @Test
     func testSpeed() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -654,9 +709,10 @@ final class ProgressBarTests: XCTestCase {
         let progress = ProgressBar(config: config)
         progress.set(size: 2)
         let output = progress.draw()
-        XCTAssertTrue(output.contains("/s"))
+        #expect(output.contains("/s"))
     }
 
+    @Test
     func testSpeedFinish() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -667,9 +723,10 @@ final class ProgressBarTests: XCTestCase {
         progress.set(size: 2)
         progress.finish()
         let output = progress.draw()
-        XCTAssertFalse(output.contains("/s"))
+        #expect(!output.contains("/s"))
     }
 
+    @Test
     func testItemsSizeAndSpeed() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -683,10 +740,11 @@ final class ProgressBarTests: XCTestCase {
         progress.set(items: 1)
         progress.set(size: 2)
         let output = progress.draw()
-        XCTAssertTrue(output.contains("1 of 2 it, 2/4 bytes"))
-        XCTAssertTrue(output.contains("/s"))
+        #expect(output.contains("1 of 2 it, 2/4 bytes"))
+        #expect(output.contains("/s"))
     }
 
+    @Test
     func testItemsSizeAndSpeedFinish() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -701,10 +759,11 @@ final class ProgressBarTests: XCTestCase {
         progress.set(size: 2)
         progress.finish()
         let output = progress.draw()
-        XCTAssertTrue(output.contains("2 it, 4 bytes"))
-        XCTAssertFalse(output.contains("/s"))
+        #expect(output.contains("2 it, 4 bytes"))
+        #expect(!output.contains("/s"))
     }
 
+    @Test
     func testNoTime() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -712,9 +771,10 @@ final class ProgressBarTests: XCTestCase {
         )
         let progress = ProgressBar(config: config)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ Task")
+        #expect(output == "⠋ Task")
     }
 
+    @Test
     func testTime() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -723,9 +783,10 @@ final class ProgressBarTests: XCTestCase {
         let progress = ProgressBar(config: config)
         sleep(1)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ Task [1s]")
+        #expect(output == "⠋ Task [1s]")
     }
 
+    @Test
     func testIgnoreSmallSize() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -735,9 +796,10 @@ final class ProgressBarTests: XCTestCase {
         let progress = ProgressBar(config: config)
         progress.set(size: 2)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ Task [0s]")
+        #expect(output == "⠋ Task [0s]")
     }
 
+    @Test
     func testItemsName() async throws {
         let config = try ProgressConfig(
             description: "Task",
@@ -748,6 +810,6 @@ final class ProgressBarTests: XCTestCase {
         let progress = ProgressBar(config: config)
         progress.set(items: 1)
         let output = progress.draw()
-        XCTAssertEqual(output, "⠋ Task 50% (1 of 2 files) [0s]")
+        #expect(output == "⠋ Task 50% (1 of 2 files) [0s]")
     }
 }
