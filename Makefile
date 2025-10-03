@@ -30,6 +30,11 @@ DSYM_DIR := bin/$(BUILD_CONFIGURATION)/bundle/container-dSYM
 DSYM_PATH := bin/$(BUILD_CONFIGURATION)/bundle/container-dSYM.zip
 CODESIGN_OPTS ?= --force --sign - --timestamp=none
 
+# SBOM tooling and output
+SBOM_DIR := artifacts/sbom/$(BUILD_CONFIGURATION)
+SYFT ?= syft
+GRYPE ?= grype
+
 # Conditionally use a temporary data directory for integration tests
 ifeq ($(strip $(APP_ROOT)),)
 	SYSTEM_START_OPTS :=
@@ -130,6 +135,40 @@ dsym:
 .PHONY: test
 test:
 	@$(SWIFT) test -c $(BUILD_CONFIGURATION) $(SWIFT_CONFIGURATION) --skip TestCLI
+	@$(MAKE) sbom-soft || true
+
+.PHONY: sbom-soft
+sbom-soft:
+	@echo "Generating SBOMs (soft) ..."
+	@command -v $(SYFT) >/dev/null 2>&1 || { echo "syft not found; skipping SBOM"; exit 0; }
+	@$(MAKE) sbom
+	@command -v $(GRYPE) >/dev/null 2>&1 || { echo "grype not found; skipping vulnerability scan"; exit 0; }
+	@$(MAKE) sbom-vulns || true
+
+.PHONY: sbom
+sbom:
+	@echo "Writing SBOMs to $(SBOM_DIR) ..."
+	@mkdir -p $(SBOM_DIR)
+	@echo "Source SBOM (CycloneDX)"
+	@$(SYFT) dir:$(ROOT_DIR) -o cyclonedx-json > $(SBOM_DIR)/source.cdx.json
+	@echo "Binaries SBOM (CycloneDX)"
+	@find $(ROOT_DIR)/bin -type f -perm +111 -maxdepth 2 2>/dev/null | awk 'NF' | while read -r f; do \
+		base=$$(echo $$f | sed 's|/|_|g'); \
+		$(SYFT) file:$$f -o cyclonedx-json > $(SBOM_DIR)/bin_$${base}.cdx.json || true; \
+	done
+	@echo "Plugins SBOM (CycloneDX)"
+	@find $(ROOT_DIR)/libexec/container/plugins -type f -perm +111 -name "*" 2>/dev/null | while read -r f; do \
+		base=$$(echo $$f | sed 's|/|_|g'); \
+		$(SYFT) file:$$f -o cyclonedx-json > $(SBOM_DIR)/plugin_$${base}.cdx.json || true; \
+	done
+
+.PHONY: sbom-vulns
+sbom-vulns:
+	@echo "Scanning SBOMs with grype (fail on high) ..."
+	@for f in $(SBOM_DIR)/*.json ; do \
+		[ -e "$$f" ] || continue; \
+		$(GRYPE) sbom:$$f --fail-on high || exit $$? ; \
+	done
 
 .PHONY: install-kernel
 install-kernel:
