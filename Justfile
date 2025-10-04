@@ -65,50 +65,65 @@ GRYPE := 'grype'
 
 # Git operations
 @git-status:
-	git status
+	@echo "→ git status"
+	@git status
 
 @git-pull:
-	git pull --rebase
+	@echo "→ git pull --rebase"
+	@git pull --rebase
 
 @git-push:
-	git push
+	@echo "→ git push"
+	@git push
 
 @git-stash:
-	git stash push -u -m "Auto-stash $(date +'%Y-%m-%d %H:%M:%S')"
+	@echo "→ git stash push -u -m \"Auto-stash $(date +'%Y-%m-%d %H:%M:%S')\""
+	@git stash push -u -m "Auto-stash $(date +'%Y-%m-%d %H:%M:%S')"
 
 @git-stash-pop:
-	git stash pop
+	@echo "→ git stash pop"
+	@git stash pop
 
 @git-stash-list:
-	git stash list
+	@echo "→ git stash list"
+	@git stash list
 
 # Commit with message (usage: just git-commit "your message")
 @git-commit message:
-	git add -A
-	git commit -m "{{message}}"
+	@echo "→ git add -A"
+	@git add -A
+	@echo "→ git commit -m \"{{message}}\""
+	@git commit -m "{{message}}"
 
 # Safe sync: stash, pull, pop
 @git-sync:
 	@if ! git diff-index --quiet HEAD --; then \
 		echo "Stashing local changes..."; \
+		echo "→ git stash push -u -m \"Auto-stash before sync $(date +'%Y-%m-%d %H:%M:%S')\""; \
 		git stash push -u -m "Auto-stash before sync $(date +'%Y-%m-%d %H:%M:%S')"; \
-		git pull --rebase && git stash pop; \
+		echo "→ git pull --rebase"; \
+		git pull --rebase && { echo "→ git stash pop"; git stash pop; }; \
 	else \
+		echo "→ git pull --rebase"; \
 		git pull --rebase; \
 	fi
 
 # Show current branch
 @git-branch:
-	git branch --show-current
+	@echo "→ git branch --show-current"
+	@git branch --show-current
 
 # Create and checkout new branch (usage: just git-new-branch "branch-name")
 @git-new-branch name:
-	git checkout -b "{{name}}"
+	@echo "→ git checkout -b \"{{name}}\""
+	@git checkout -b "{{name}}"
 
 # Show recent commit log
 @git-log:
-	git log --oneline --decorate --graph -10
+	@echo "→ git log --oneline --decorate --graph -10"
+	@git log --oneline --decorate --graph -10
 
 # Show uncommitted changes
 @git-diff:
-	git diff HEAD
+	@echo "→ git diff HEAD"
+	@git diff HEAD
