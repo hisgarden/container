@@ -3,11 +3,11 @@
 # Default configuration variables
 set shell := ["/bin/zsh", "-cu"]
 
-BUILD_CONFIGURATION := env_var("BUILD_CONFIGURATION", "debug")
-CODESIGN_ID := env_var("CODESIGN_ID", "-")
-APP_ROOT := env_var("APP_ROOT", "")
-SYFT := env_var("SYFT", "syft")
-GRYPE := env_var("GRYPE", "grype")
+BUILD_CONFIGURATION := 'debug'
+CODESIGN_ID := '-'
+APP_ROOT := ''
+SYFT := 'syft'
+GRYPE := 'grype'
 
 # Print help
 @default:
@@ -35,7 +35,7 @@ GRYPE := env_var("GRYPE", "grype")
 
 # Start/Stop system services
 @start:
-	bin/container system start {{ if APP_ROOT != "" { print("--app-root " + APP_ROOT) } }}
+	if [ -n "{{APP_ROOT}}" ]; then bin/container system start --app-root "{{APP_ROOT}}"; else bin/container system start; fi
 
 @stop:
 	bin/container system stop || true
@@ -62,3 +62,53 @@ GRYPE := env_var("GRYPE", "grype")
 # Clean
 @clean:
 	make clean
+
+# Git operations
+@git-status:
+	git status
+
+@git-pull:
+	git pull --rebase
+
+@git-push:
+	git push
+
+@git-stash:
+	git stash push -u -m "Auto-stash $(date +'%Y-%m-%d %H:%M:%S')"
+
+@git-stash-pop:
+	git stash pop
+
+@git-stash-list:
+	git stash list
+
+# Commit with message (usage: just git-commit "your message")
+@git-commit message:
+	git add -A
+	git commit -m "{{message}}"
+
+# Safe sync: stash, pull, pop
+@git-sync:
+	@if ! git diff-index --quiet HEAD --; then \
+		echo "Stashing local changes..."; \
+		git stash push -u -m "Auto-stash before sync $(date +'%Y-%m-%d %H:%M:%S')"; \
+		git pull --rebase && git stash pop; \
+	else \
+		git pull --rebase; \
+	fi
+
+# Show current branch
+@git-branch:
+	git branch --show-current
+
+# Create and checkout new branch (usage: just git-new-branch "branch-name")
+@git-new-branch name:
+	git checkout -b "{{name}}"
+
+# Show recent commit log
+@git-log:
+	git log --oneline --decorate --graph -10
+
+# Show uncommitted changes
+@git-diff:
+	git diff HEAD

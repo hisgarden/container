@@ -47,3 +47,5 @@ if command -v "$GRYPE_BIN" >/dev/null 2>&1; then
 else
   echo "[sbom] grype not found; skipping vulnerability scan"
 fi
+
+

@@ -142,15 +142,24 @@ sbom-soft:
 	@echo "Generating SBOMs (soft) ..."
 	@command -v $(SYFT) >/dev/null 2>&1 || { echo "syft not found; skipping SBOM"; exit 0; }
 	@$(MAKE) sbom
-	@command -v $(GRYPE) >/dev/null 2>&1 || { echo "grype not found; skipping vulnerability scan"; exit 0; }
-	@$(MAKE) sbom-vulns || true
+	@if command -v $(GRYPE) >/dev/null 2>&1; then \
+		$(MAKE) sbom-vulns ; \
+	else \
+		echo "grype not found; skipping vulnerability scan" ; \
+	fi
 
 .PHONY: sbom
 sbom:
 	@echo "Writing SBOMs to $(SBOM_DIR) ..."
 	@mkdir -p $(SBOM_DIR)
 	@echo "Source SBOM (CycloneDX)"
-	@$(SYFT) dir:$(ROOT_DIR) -o cyclonedx-json > $(SBOM_DIR)/source.cdx.json
+	@$(SYFT) dir:$(ROOT_DIR) --exclude "**/.github/**" -o cyclonedx-json > $(SBOM_DIR)/source.cdx.json
+	@if command -v jq >/dev/null 2>&1; then \
+		tmpfile=$$(mktemp); \
+		jq '.metadata |= (.component // {}) | .metadata.component.name="container" | .metadata.component.version="$(RELEASE_VERSION)"' $(SBOM_DIR)/source.cdx.json > $$tmpfile && mv $$tmpfile $(SBOM_DIR)/source.cdx.json ; \
+	else \
+		echo "jq not found; skipping name/version injection" ; \
+	fi
 	@echo "Binaries SBOM (CycloneDX)"
 	@find $(ROOT_DIR)/bin -type f -perm +111 -maxdepth 2 2>/dev/null | awk 'NF' | while read -r f; do \
 		base=$$(echo $$f | sed 's|/|_|g'); \
