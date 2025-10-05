@@ -1,5 +1,15 @@
 # `container`
 
+[![PR Build](https://github.com/hisgarden/container/actions/workflows/pr-build.yml/badge.svg)](https://github.com/hisgarden/container/actions/workflows/pr-build.yml)
+[![Main Build](https://github.com/hisgarden/container/actions/workflows/merge-build.yml/badge.svg)](https://github.com/hisgarden/container/actions/workflows/merge-build.yml)
+[![Release](https://github.com/hisgarden/container/actions/workflows/release.yml/badge.svg)](https://github.com/hisgarden/container/actions/workflows/release.yml)
+
+[![Latest Release](https://img.shields.io/github/v/release/hisgarden/container?style=for-the-badge&label=Latest%20Release&color=0D1117&labelColor=161B22&logoColor=white)](https://github.com/hisgarden/container/releases/latest)
+[![Swift Version](https://img.shields.io/badge/Swift-6.2-orange?style=for-the-badge&logo=swift&logoColor=white)](https://swift.org)
+[![macOS](https://img.shields.io/badge/macOS-26+-lightgrey?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/hisgarden/container)
+[![Tests](https://img.shields.io/badge/Tests-171%20passing-brightgreen?style=for-the-badge&logo=github&logoColor=white)](https://github.com/hisgarden/container/actions)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue?style=for-the-badge&logo=apache&logoColor=white)](https://github.com/hisgarden/container/blob/main/LICENSE)
+
 `container` is a tool that you can use to create and run Linux containers as lightweight virtual machines on your Mac. It's written in Swift, and optimized for Apple silicon.
 
 The tool consumes and produces [OCI-compatible container images](https://github.com/opencontainers/image-spec), so you can pull and run images from any standard container registry. You can push images that you build to those registries as well, and run the images in any other OCI-compatible application.
