@@ -15,10 +15,10 @@
 //===----------------------------------------------------------------------===//
 
 import ContainerClient
+import Testing
 import ContainerPersistence
 import ContainerizationArchive
 import Foundation
-import Testing
 
 // This suite is run serialized since each test modifies the global default kernel
 @Suite(.serialized)

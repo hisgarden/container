@@ -15,9 +15,9 @@
 //===----------------------------------------------------------------------===//
 
 import ContainerPersistence
+import Testing
 import ContainerizationError
 import Foundation
-import Testing
 
 @testable import ContainerClient
 

@@ -51,10 +51,10 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-protobuf.git", from: "1.29.0"),
         .package(url: "https://github.com/apple/swift-nio.git", from: "2.80.0"),
         .package(url: "https://github.com/swiftlang/swift-docc-plugin.git", from: "1.1.0"),
-        .package(url: "https://github.com/apple/swift-testing.git", from: "0.10.0"),
         .package(url: "https://github.com/swift-server/async-http-client.git", from: "1.20.1"),
         .package(url: "https://github.com/orlandos-nl/DNSClient.git", from: "2.4.1"),
         .package(url: "https://github.com/Bouke/DNS.git", from: "1.2.0"),
+        .package(url: "https://github.com/apple/swift-testing.git", from: "0.10.0"),
         .package(url: "https://github.com/apple/containerization.git", exact: Version(stringLiteral: scVersion)),
     ],
     targets: [
@@ -187,8 +187,8 @@ let package = Package(
         .testTarget(
             name: "ContainerNetworkServiceTests",
             dependencies: [
+                .product(name: "Testing", package: "swift-testing"),
                 "ContainerNetworkService",
-                .product(name: "Testing", package: "swift-testing")
             ]
         ),
         .executableTarget(
@@ -242,8 +242,8 @@ let package = Package(
         .testTarget(
             name: "ContainerBuildTests",
             dependencies: [
+                .product(name: "Testing", package: "swift-testing"),
                 "ContainerBuild",
-                .product(name: "Testing", package: "swift-testing")
             ]
         ),
         .target(
@@ -267,10 +267,10 @@ let package = Package(
         .testTarget(
             name: "ContainerClientTests",
             dependencies: [
+                .product(name: "Testing", package: "swift-testing"),
                 .product(name: "Containerization", package: "containerization"),
                 "ContainerClient",
                 "ContainerPersistence",
-                .product(name: "Testing", package: "swift-testing")
             ]
         ),
         .target(
@@ -291,8 +291,8 @@ let package = Package(
         .testTarget(
             name: "ContainerPluginTests",
             dependencies: [
+                .product(name: "Testing", package: "swift-testing"),
                 "ContainerPlugin",
-                .product(name: "Testing", package: "swift-testing")
             ]
         ),
         .target(
@@ -317,8 +317,8 @@ let package = Package(
         .testTarget(
             name: "TerminalProgressTests",
             dependencies: [
+                .product(name: "Testing", package: "swift-testing"),
                 "TerminalProgress",
-                .product(name: "Testing", package: "swift-testing")
             ]
         ),
         .target(
@@ -334,9 +334,9 @@ let package = Package(
         .testTarget(
             name: "DNSServerTests",
             dependencies: [
+                .product(name: "Testing", package: "swift-testing"),
                 .product(name: "DNS", package: "DNS"),
                 "DNSServer",
-                .product(name: "Testing", package: "swift-testing")
             ]
         ),
         .target(
@@ -351,13 +351,14 @@ let package = Package(
         .testTarget(
             name: "SocketForwarderTests",
             dependencies: [
+                .product(name: "Testing", package: "swift-testing"),
                 "SocketForwarder",
-                .product(name: "Testing", package: "swift-testing")
             ]
         ),
         .testTarget(
             name: "CLITests",
             dependencies: [
+                .product(name: "Testing", package: "swift-testing"),
                 .product(name: "AsyncHTTPClient", package: "async-http-client"),
                 .product(name: "Containerization", package: "containerization"),
                 .product(name: "ContainerizationExtras", package: "containerization"),
@@ -365,7 +366,6 @@ let package = Package(
                 "ContainerBuild",
                 "ContainerClient",
                 "ContainerNetworkService",
-                .product(name: "Testing", package: "swift-testing")
             ],
             path: "Tests/CLITests"
         ),

@@ -2,7 +2,7 @@
   "$schema": "http://cyclonedx.org/schema/bom-1.6.schema.json",
   "bomFormat": "CycloneDX",
   "specVersion": "1.6",
-  "serialNumber": "urn:uuid:da65da62-fb7a-4ddb-82d0-5fc12f4691ad",
+  "serialNumber": "urn:uuid:465b6626-90b7-43db-9ab6-151cb35d045f",
   "version": 1,
   "metadata": {
     "bom-ref": "e54e291bdf9d7630",
@@ -10,7 +10,7 @@
     "name": "/Users/hisgarden/workspace/container",
     "component": {
       "name": "container",
-      "version": "cc4bd07"
+      "version": "v0.5.0"
     }
   },
   "components": [
@@ -6343,11 +6343,11 @@
       "hashes": [
         {
           "alg": "SHA-1",
-          "content": "cbd45f874e760d7b9f0d419f385d2c6af1c9b70c"
+          "content": "ec396666a03f3ceb1ae934c17f93d8b8ec52ec35"
         },
         {
           "alg": "SHA-256",
-          "content": "cf563a08ae99ff39c05fe8053f0ddfc60957506a419cb8322f730bf4f2542109"
+          "content": "4ed91c2414f7c6c66be03bc29aaedc0cdbd9728351983bc9587d0b46922d3201"
         }
       ]
     }

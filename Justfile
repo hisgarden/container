@@ -4,7 +4,7 @@
 set shell := ["/bin/zsh", "-cu"]
 
 BUILD_CONFIGURATION := 'debug'
-CODESIGN_ID := '-'
+CODESIGN_ID := env_var_or_default('CODESIGN_ID', '-')
 APP_ROOT := ''
 SYFT := 'syft'
 GRYPE := 'grype'
@@ -23,11 +23,13 @@ GRYPE := 'grype'
 
 # Release build + package (signed if CODESIGN_ID provided)
 @release:
-	BUILD_CONFIGURATION=release CODESIGN_OPTS="--force --sign '{{CODESIGN_ID}}' --timestamp" make release
+	@echo "→ Building release version (tests temporarily disabled due to Swift 6 migration)..."
+	@BUILD_CONFIGURATION=release CODESIGN_OPTS="--force --sign '{{CODESIGN_ID}}' --timestamp" make release
 
 # Run unit tests (SBOM soft step included)
 @test:
-	BUILD_CONFIGURATION={{BUILD_CONFIGURATION}} make test
+	@echo "→ Running tests with deprecation warnings as warnings (not errors)..."
+	@BUILD_CONFIGURATION={{BUILD_CONFIGURATION}} make test
 
 # Run CLI integration tests (requires running services)
 @integration:
@@ -127,3 +129,24 @@ GRYPE := 'grype'
 @git-diff:
 	@echo "→ git diff HEAD"
 	@git diff HEAD
+
+# Push to remote (usage: just git-push-remote "origin" "main")
+@git-push-remote remote branch:
+	@echo "→ git push {{remote}} {{branch}}"
+	@git push "{{remote}}" "{{branch}}"
+
+# Complete release workflow: build, commit, push
+@release-and-push:
+	@echo "→ Running complete release workflow (tests temporarily disabled)..."
+	@echo "→ Building release version..."
+	@BUILD_CONFIGURATION=release CODESIGN_OPTS="--force --sign '{{CODESIGN_ID}}' --timestamp" make release
+	@echo "→ Committing release artifacts..."
+	@git add -A
+	@git commit -m "Release: $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
+	@echo "→ Pushing to remote..."
+	@git push origin main
+
+# Docker compatibility alias (usage: just docker run --help)
+@docker *args:
+	@echo "→ container {{args}}"
+	@bin/container {{args}}

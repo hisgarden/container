@@ -15,8 +15,8 @@
 //===----------------------------------------------------------------------===//
 
 import ContainerizationError
-import ContainerizationExtras
 import Testing
+import ContainerizationExtras
 
 @testable import ContainerNetworkService
 

@@ -15,12 +15,12 @@
 //===----------------------------------------------------------------------===//
 
 import AsyncHTTPClient
+import Testing
 import ContainerClient
 import ContainerizationError
 import ContainerizationExtras
 import ContainerizationOS
 import Foundation
-import Testing
 
 class TestCLINetwork: CLITest {
     private static let retries = 10

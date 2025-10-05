@@ -15,8 +15,8 @@
 //===----------------------------------------------------------------------===//
 
 import Logging
-import NIO
 import Testing
+import NIO
 
 @testable import SocketForwarder
 

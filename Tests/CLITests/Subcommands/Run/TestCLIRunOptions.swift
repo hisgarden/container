@@ -15,11 +15,11 @@
 //===----------------------------------------------------------------------===//
 
 import AsyncHTTPClient
+import Testing
 import ContainerClient
 import ContainerizationExtras
 import ContainerizationOS
 import Foundation
-import Testing
 
 class TestCLIRunCommand: CLITest {
     private func getTestName() -> String {

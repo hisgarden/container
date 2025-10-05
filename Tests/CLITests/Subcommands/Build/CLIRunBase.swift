@@ -16,7 +16,6 @@
 
 import ContainerizationOS
 import Foundation
-import Testing
 
 class TestCLIRunBase: CLITest {
     var terminal: Terminal!

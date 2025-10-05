@@ -16,7 +16,6 @@
 
 import ContainerPlugin
 import Foundation
-import Testing
 
 struct MockPluginError: Error {}
 

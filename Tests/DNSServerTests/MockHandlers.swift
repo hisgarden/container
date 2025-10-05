@@ -15,7 +15,6 @@
 //===----------------------------------------------------------------------===//
 
 import DNS
-import Testing
 
 @testable import DNSServer
 

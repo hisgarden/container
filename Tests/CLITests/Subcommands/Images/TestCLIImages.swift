@@ -15,9 +15,9 @@
 //===----------------------------------------------------------------------===//
 
 import ContainerClient
+import Testing
 import ContainerizationOCI
 import Foundation
-import Testing
 
 class TestCLIImagesCommand: CLITest {
     func doRemoveImages(images: [String]? = nil) throws {

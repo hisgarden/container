@@ -15,8 +15,8 @@
 //===----------------------------------------------------------------------===//
 
 import ContainerizationOS
-import Foundation
 import Testing
+import Foundation
 
 extension TestCLIRunBase {
     class TestCLITermIO: TestCLIRunBase {

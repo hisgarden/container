@@ -122,18 +122,18 @@ let testCases = [
     TestCase(pattern: "dist/*.whl", fileName: "dist/proxy.py-2.4.0rc3.dev36+g08acad9-py3-none-any.whl", expectSuccess: true),
 ]
 
-@Suite struct TestGlobber {
+struct TestGlobber {
     @Test("All glob patterns match", arguments: globTestCases)
     func testGlobMatching(_ test: TestCase) throws {
         let globber = Globber(URL(fileURLWithPath: "/"))
         let found = try globber.glob(test.fileName, test.pattern)
-        #expect(found == test.expectSuccess, "expected found to be \(test.expectSuccess), instead got \(found)")
+        #expect(found == test.expectSuccess)
     }
 
     @Test("Invalid computed regex patterns throw error", arguments: errorGlobTestCases)
     func testInvalidGlob(_ test: TestCase) throws {
         let globber = Globber(URL(fileURLWithPath: "/"))
-        #expect(throws: (any Error).self) {
+        #expect(throws: Error.self) {
             try globber.glob(test.fileName, test.pattern)
         }
     }
@@ -179,7 +179,7 @@ let testCases = [
         #expect(throws: Never.self) {
             try globber.match(test.pattern)
             let found: Bool = !globber.results.isEmpty
-            #expect(found == test.expectSuccess, "expected match to be \(test.expectSuccess), instead got \(found) \(tempDir.childrenRecursive)")
+            #expect(found == test.expectSuccess)
         }
     }
 
@@ -199,7 +199,7 @@ let testCases = [
         let globber = Globber(testDir)
         #expect(throws: Never.self) {
             try globber.match("abc/**")
-            #expect(globber.results.isEmpty, "expected to find no matches, instead found \(globber.results)")
+            #expect(globber.results.isEmpty)
         }
     }
 }

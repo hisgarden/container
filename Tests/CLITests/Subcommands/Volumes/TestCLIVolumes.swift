@@ -15,8 +15,8 @@
 //===----------------------------------------------------------------------===//
 
 import ContainerClient
-import Foundation
 import Testing
+import Foundation
 
 class TestCLIVolumes: CLITest {
 

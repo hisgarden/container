@@ -20,7 +20,6 @@ import ContainerNetworkService
 import Containerization
 import ContainerizationOS
 import Foundation
-import Testing
 
 class CLITest {
     struct Image: Codable {

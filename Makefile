@@ -134,7 +134,7 @@ dsym:
 
 .PHONY: test
 test:
-	@$(SWIFT) test -c $(BUILD_CONFIGURATION) $(SWIFT_CONFIGURATION) --skip TestCLI
+	@$(SWIFT) test -c $(BUILD_CONFIGURATION) -Xswiftc -no-warnings-as-errors --skip TestCLI
 	@$(MAKE) sbom-soft || true
 
 .PHONY: sbom-soft

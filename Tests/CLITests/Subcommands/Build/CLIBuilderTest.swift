@@ -15,8 +15,8 @@
 //===----------------------------------------------------------------------===//
 
 import ContainerizationOCI
-import Foundation
 import Testing
+import Foundation
 
 extension TestCLIBuildBase {
     class CLIBuilderTest: TestCLIBuildBase {
